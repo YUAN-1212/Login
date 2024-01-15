@@ -1,0 +1,187 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+}
+
+<body class="bg-gradient-primary">
+
+    <div class="container" id="app1">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                    </div>
+                                    <form class="user">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user"
+                                                   v-model="Email" name="Email" aria-describedby="emailHelp"
+                                                   v-on:blur="EmailCheck()"
+                                                   placeholder="Enter Email Address...">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                   v-model="Password" name="Password"
+                                                   v-on:blur="PasswordCheck()"
+                                                   placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">
+                                                    Remember
+                                                    Me
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <a class="btn btn-primary btn-user btn-block" v-on:click="DoLogin()">
+                                            Login
+                                        </a>
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="register.html">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal 執行有錯誤時，顯示錯誤訊息 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" draggable="true" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" name="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="ErrorMsg">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" name="close" id="exampleClose" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            var exampleModal = document.getElementById('exampleModal');
+
+            var exampleClose = document.getElementById('exampleClose');
+            exampleClose.addEventListener('click', function () {
+                var modal = bootstrap.Modal.getInstance(exampleModal);
+                modal.hide();
+            }, false);
+
+            var close = document.querySelector('.close');
+            close.addEventListener('click', function () {
+                var modal = bootstrap.Modal.getInstance(exampleModal);
+                modal.hide();
+            }, false);
+
+        });
+
+        const app1 = Vue.createApp({
+            data() {
+                return {
+                    message: 'Hello Vue 3.0',
+                    message2: '第二個訊息',
+                    Email: '',
+                    Password: '',
+                }
+            },
+            mounted() {
+                console.log('mounted');
+
+            },
+            methods: {
+                /** 進行登入 */
+                DoLogin(e) {
+                    if (!this.EmailCheck() && !this.PasswordCheck()) {
+                        return false;
+                    } else {
+                        /** 進後端檢查 */
+                        axios
+                            .post('/Member/Login',
+                                JSON.stringify({
+                                    Email: app1.Email,
+                                    Password: app1.Password
+                                }),
+                                {
+                                    headers: {
+                                        'Content-Type': 'application/json; charset=utf-8',
+                                    }
+                                }
+                            )
+                            .then(response => {
+                                setTimeout(() => {
+                                    if (response.data.vaild === true) {
+                                        window.location = response.data.url;
+                                    } else {
+                                        alert('登入失敗');
+                                    }
+                                }, 1000);
+                            })
+                            .catch(function (error) { // 请求失败处理
+                                alert(error);
+                                console.log(error);
+                            })
+                    }
+                },
+                EmailCheck() {
+                    $('input[type="email"]').css('border-color', 'red');
+
+                    if (app1.Email === '') {
+                        alert('Email 不可為空白');
+                        return false;
+                    } else {
+                        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                        if (!app1.Email.match(validRegex)) {
+                            alert('Email 格式錯誤');
+                            return false;
+                        }
+                    }
+
+                    if (true) {
+                        $('input[type="email"]').removeAttr('style');
+                        return true;
+                    }
+                },
+                PasswordCheck() {
+                    if (app1.Password === '') {
+                        $('input[type="password"]').css('border-color', 'red');
+                        alert('Password 不可為空白');
+                        return false;
+                    } else {
+                        $('input[type="password"]').removeAttr('style');
+                        return true;
+                    }
+                },
+            },
+        }).mount('#app1')
+
+    </script>
+</body>

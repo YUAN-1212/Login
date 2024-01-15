@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Login", "Login\Login.csproj", "{1C6DCE8F-B49F-410A-A3A8-4D373037E17C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{F5549B75-DD0A-41D1-A7A6-FD4CDD3CCC57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{AB2B0C77-D758-49AC-A35A-C0E71839A60F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C6DCE8F-B49F-410A-A3A8-4D373037E17C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C6DCE8F-B49F-410A-A3A8-4D373037E17C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C6DCE8F-B49F-410A-A3A8-4D373037E17C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C6DCE8F-B49F-410A-A3A8-4D373037E17C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5549B75-DD0A-41D1-A7A6-FD4CDD3CCC57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5549B75-DD0A-41D1-A7A6-FD4CDD3CCC57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5549B75-DD0A-41D1-A7A6-FD4CDD3CCC57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5549B75-DD0A-41D1-A7A6-FD4CDD3CCC57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB2B0C77-D758-49AC-A35A-C0E71839A60F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB2B0C77-D758-49AC-A35A-C0E71839A60F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB2B0C77-D758-49AC-A35A-C0E71839A60F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB2B0C77-D758-49AC-A35A-C0E71839A60F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AEFA7977-6D5A-415B-93E8-59A1B3B44453}
+	EndGlobalSection
+EndGlobal
