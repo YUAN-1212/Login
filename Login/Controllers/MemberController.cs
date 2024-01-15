@@ -32,8 +32,14 @@ namespace Login.Controllers
             }
 
             var isok = _service.DoLogin(login);
+            var url = "";
 
-            return Json(new { vaild = isok, url = "/Member/Blank" });
+            if (isok) 
+            {
+                url = "/Member/Blank";
+            }
+
+            return Json(new { vaild = isok, url = url });
         }
 
         public IActionResult Blank()

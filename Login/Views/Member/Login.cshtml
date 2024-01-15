@@ -23,15 +23,16 @@
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
+                                            <!-- 使用 v-onblur 會一直觸發，改成 change -->
                                             <input type="email" class="form-control form-control-user"
                                                    v-model="Email" name="Email" aria-describedby="emailHelp"
-                                                   v-on:blur="EmailCheck()"
+                                                   v-on:change="EmailCheck()"
                                                    placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
                                                    v-model="Password" name="Password"
-                                                   v-on:blur="PasswordCheck()"
+                                                   v-on:change="PasswordCheck()"
                                                    placeholder="Password">
                                         </div>
                                         <div class="form-group">
@@ -102,6 +103,9 @@
                 modal.hide();
             }, false);
 
+            $.unblockUI();
+            //$.blockUI();
+            $(".spinner").hide();
         });
 
         const app1 = Vue.createApp({
@@ -136,9 +140,13 @@
                                     }
                                 }
                             )
-                            .then(response => {
+                            .then(response => {                                
+                                $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
+
                                 setTimeout(() => {
-                                    if (response.data.vaild === true) {
+                                    $.unblockUI();
+
+                                    if (response.data.vaild === true) {                                    
                                         window.location = response.data.url;
                                     } else {
                                         alert('登入失敗');
@@ -146,6 +154,7 @@
                                 }, 1000);
                             })
                             .catch(function (error) { // 请求失败处理
+                                $.unblockUI();
                                 alert(error);
                                 console.log(error);
                             })
