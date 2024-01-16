@@ -4,6 +4,6 @@ namespace Application.Member
 {
     public interface IMemberRepository
     {
-        bool DoLogin(LoginDto loginDto);
+        LoginDto DoLogin(LoginDto loginDto);
     }
 }

@@ -23,16 +23,15 @@
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
-                                            <!-- 使用 v-onblur 會一直觸發，改成 change -->
                                             <input type="email" class="form-control form-control-user"
                                                    v-model="Email" name="Email" aria-describedby="emailHelp"
-                                                   v-on:change="EmailCheck()"
+                                                   v-on:blur="EmailCheck()"
                                                    placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                   v-model="Password" name="Password"
-                                                   v-on:change="PasswordCheck()"
+                                                   v-model="Password" name="Password"                                                   
+                                                   v-on:keyup.enter="DoLogin()"
                                                    placeholder="Password">
                                         </div>
                                         <div class="form-group">
@@ -104,8 +103,6 @@
             }, false);
 
             $.unblockUI();
-            //$.blockUI();
-            $(".spinner").hide();
         });
 
         const app1 = Vue.createApp({
@@ -129,7 +126,7 @@
                     } else {
                         /** 進後端檢查 */
                         axios
-                            .post('/Member/Login',
+                            .post('/Member/DoLogin',
                                 JSON.stringify({
                                     Email: app1.Email,
                                     Password: app1.Password
@@ -146,10 +143,10 @@
                                 setTimeout(() => {
                                     $.unblockUI();
 
-                                    if (response.data.vaild === true) {                                    
+                                    if (response.data.vaild === true) {
                                         window.location = response.data.url;
                                     } else {
-                                        alert('登入失敗');
+                                        alert(response.data.msg);
                                     }
                                 }, 1000);
                             })

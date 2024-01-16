@@ -19,7 +19,7 @@ namespace Login.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody] LoginDto login)
+        public IActionResult DoLogin([FromBody] LoginDto login)
         {
             if (string.IsNullOrEmpty(login.Email))
             {
@@ -34,12 +34,12 @@ namespace Login.Controllers
             var isok = _service.DoLogin(login);
             var url = "";
 
-            if (isok) 
+            if (isok.valid) 
             {
                 url = "/Member/Blank";
             }
 
-            return Json(new { vaild = isok, url = url });
+            return Json(new { vaild = isok.valid, url = url, msg = isok.message });
         }
 
         public IActionResult Blank()

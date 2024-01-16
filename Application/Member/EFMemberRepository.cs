@@ -12,10 +12,8 @@ namespace Application.Member
         /// 登入
         /// </summary>
         /// <returns></returns>
-        public bool DoLogin(LoginDto loginDto)
+        public LoginDto DoLogin(LoginDto loginDto)
         {
-            var isok = false;
-
             try
             {
                 var pw = loginDto.Password.ToMD5();
@@ -23,13 +21,20 @@ namespace Application.Member
 
                 if (user != null)
                 {
-                    isok = true;
+                    loginDto.valid = true;
+                }
+                else
+                {
+                    loginDto.valid = false;
+                    loginDto.message = "無此會員!";
                 }
 
-                return isok;
+                return loginDto;
             }
             catch (Exception ex)
             {
+                loginDto.valid = false;
+                loginDto.message = ex.Message;
                 throw ex;
             }
         }
