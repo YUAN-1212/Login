@@ -46,7 +46,17 @@
    
 </head>
 <body>
-    <div class="container">
+    <div>
+        @* <div id="sidebar" class="navbar-default navbar-static-side" role="navigation" style="z-index:28;">
+            @await Html.PartialAsync("SubMenu", "Head")
+
+            <div role="main" id="content-wrapper" class="d-flex flex-column">
+                @RenderBody()
+            </div>
+        </div> *@
+        @* <div role="main" class="pb-3">
+            @RenderBody()
+        </div> *@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -54,12 +64,6 @@
 
     <footer>
     </footer>
-
-
-    <!-- 載入範本的js -->
-    <!-- <script src="~/js/sb-admin-2.js"></script>
-    <script src="~/js/sb-admin-2.min.js"></script>  -->
-
  
     @await RenderSectionAsync("Scripts", required: false)
 </body>

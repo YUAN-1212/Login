@@ -116,9 +116,35 @@
             },
             mounted() {
                 console.log('mounted');
-
+                this.checkLogin();
             },
             methods: {
+                /** 是否已登入 */
+                checkLogin() {
+                    /** 進後端檢查 */
+                    axios
+                        .post('/Member/checkLogin', null
+                        )
+                        .then(response => {
+                            $.blockUI({ message: '<h1>頁面載入中請稍候…</h1>' });
+
+                            setTimeout(() => {
+                                $.unblockUI();
+
+                                if (response.data.vaild === true) {
+                                    alert("已登入，將自行跳轉頁面");
+                                    window.location = response.data.url;
+                                } else {
+                                    //alert(response.data.msg);
+                                }
+                            }, 1000);
+                        })
+                        .catch(function (error) { // 请求失败处理
+                            $.unblockUI();
+                            alert(error);
+                            console.log(error);
+                        })
+                },
                 /** 進行登入 */
                 DoLogin(e) {
                     if (!this.EmailCheck() && !this.PasswordCheck()) {
@@ -157,6 +183,7 @@
                             })
                     }
                 },
+                /** Email檢查 */
                 EmailCheck() {
                     $('input[type="email"]').css('border-color', 'red');
 
@@ -176,6 +203,7 @@
                         return true;
                     }
                 },
+                /** 密碼檢查 */
                 PasswordCheck() {
                     if (app1.Password === '') {
                         $('input[type="password"]').css('border-color', 'red');

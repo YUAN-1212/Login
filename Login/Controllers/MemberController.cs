@@ -1,12 +1,18 @@
 ﻿using Application.Member;
 using Application.Member.Dto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Policy;
 
 namespace Login.Controllers
 {
     public class MemberController : Controller
     {
         private readonly IMemberRepository _service;
+
+        // session 使用的參數
+        const string Email = "Email";
+        const string userName = "_UserName";
 
         public MemberController(IMemberRepository service)
         {
@@ -18,6 +24,44 @@ namespace Login.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 頁面一載入，先檢查有無登入過
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult checkLogin() 
+        {
+            bool vaild = false;
+            string url = "";
+            string message = "";
+
+            string test = HttpContext.Session.GetString("Email");
+            string test2 = HttpContext.Session.GetString("UserLogin");
+
+            string? test3 = Request.Cookies[Email];
+            string? test4 = Request.Cookies["UserLogin"];
+
+            // 檢查會員 Cookies 是否存在
+            if (Request.Cookies[Email] == null && 
+                (Request.Cookies["UserLogin"] == "N" || Request.Cookies["UserLogin"] == null))
+            {
+                message = "無會員登入記錄";                
+            }
+            else
+            {
+                vaild = true;
+                message = "已登入";
+                url = "/Member/Blank";
+            }
+
+            return Json(new { vaild = vaild, url = url, msg = message });
+        }
+
+        /// <summary>
+        /// 進行登入
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult DoLogin([FromBody] LoginDto login)
         {
@@ -36,14 +80,39 @@ namespace Login.Controllers
 
             if (isok.valid) 
             {
+                CookieOptions options = new CookieOptions();
+                options.Expires = DateTime.Now.AddDays(7);
+                Response.Cookies.Append(Email, login.Email, options);
+                Response.Cookies.Append("UserLogin", "Y", options);
+
+                // 將登入帳號記錄在 Session 內
+                HttpContext.Session.SetString(Email, login.Email); 
+                HttpContext.Session.SetString("UserLogin", "Y"); //Y: 使用者已登入; N:使用者未登入OR登入失敗
+
                 url = "/Member/Blank";
             }
+            else
+            {
+                HttpContext.Session.SetString("UserLogin", "N");
+            }            
 
             return Json(new { vaild = isok.valid, url = url, msg = isok.message });
         }
 
         public IActionResult Blank()
         {
+            return View();
+        }        
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult Logut()
+        {
+            //登出要清除
+            //HttpContext.Session.Clear();
             return View();
         }
     }
