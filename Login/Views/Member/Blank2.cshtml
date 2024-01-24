@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "空白頁 - 2";
+}
+
+<!-- Begin Page Content -->
+<div class="container-fluid" id="myContent">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Blank Page - 2</h1>
+
+</div>
+
+
+
+
+<script>
+    const app1 = Vue.createApp({
+        data() {
+            return {
+                Message: '123',
+            }
+        },
+        mounted() {
+            console.log('mounted app2');
+
+        },
+        methods: {
+            /** 進行登出 */
+           
+        },
+    }).mount('#myContent')
+
+  
+</script>

@@ -1,5 +1,6 @@
 ﻿using Application.Member;
 using Application.Member.Dto;
+using Login.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +9,7 @@ using System.Security.Policy;
 
 namespace Login.Controllers
 {
-    //[Authorize]
+    [AuthorizationFilter]
     public class MemberController : Controller
     {
         private readonly IMemberRepository _service;
@@ -112,12 +113,20 @@ namespace Login.Controllers
             return Json(new { vaild = isok.valid, url = url, msg = isok.message });
         }
 
+        [ByCheck]
         public IActionResult Blank()
         {
           
 
             return View();
-        }        
+        }
+
+        public IActionResult Blank2()
+        {
+
+
+            return View();
+        }
 
         /// <summary>
         /// 登出

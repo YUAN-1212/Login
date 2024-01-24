@@ -1,6 +1,7 @@
 using Application.Member.Dto;
 using Domain.Model;
 using Login;
+using Login.Filter;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Forbidden/";
     });
 
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add(typeof(AuthorizationFilter));
+});
 
 var app = builder.Build();
 
