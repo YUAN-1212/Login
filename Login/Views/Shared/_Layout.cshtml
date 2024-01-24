@@ -1,9 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Login.ViewComponents
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Login</title>
+    <title>@ViewData["Title"] - Login 練習</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Login.styles.css" asp-append-version="true" />
@@ -46,21 +48,25 @@
    
 </head>
 <body>
-    <div>
-        @* <div id="sidebar" class="navbar-default navbar-static-side" role="navigation" style="z-index:28;">
-            @await Html.PartialAsync("SubMenu", "Head")
+    @* if (User.Identity.IsAuthenticated) *@
+    @*{*@
+        <div id="sidebar" class="navbar-default navbar-static-side" role="navigation" style="z-index:28;">
+            @await Component.InvokeAsync(typeof(SideBarNavViewComponent))
 
-            <div role="main" id="content-wrapper" class="d-flex flex-column">
-                @RenderBody()
-            </div>
-        </div> *@
-        @* <div role="main" class="pb-3">
-            @RenderBody()
-        </div> *@
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+        </div>
+    @*}*@
+
+   
+    @*  <div role="main" id="BodyContent" class="container body-content">
+    @RenderBody()
+    </div> *@
+
+    @* <div role="main" class="pb-3" id="main">
+    @RenderBody()
+    </div> *@
+    <main role="main" class="pb-3" id="main">
+        @RenderBody()
+    </main>
 
     <footer>
     </footer>
@@ -68,3 +74,23 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#main").hide();
+
+        if (window.location.href.split('/')[4] !== '' && window.location.href.split('/')[4] !== undefined) {
+            if (window.location.href.split('/')[4] !== 'login') {
+                var addressContainer = document.getElementById('myContent');
+                $('#test').append(addressContainer.innerHTML);
+                $("#main").hide();
+            }
+        } else {
+            // 顯示-登入頁
+            $('#sidebar').hide();
+            $("#main").show();
+        }
+        
+    });
+</script>
+

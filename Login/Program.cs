@@ -1,6 +1,8 @@
+using Application.Member.Dto;
 using Domain.Model;
 using Login;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,10 +35,14 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        //未登入時會自動導到這個網址
+        options.LoginPath = new PathString("/Member/Login/");
+
         options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
         options.SlidingExpiration = true;
         options.AccessDeniedPath = "/Forbidden/";
     });
+
 
 var app = builder.Build();
 
@@ -53,6 +59,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// 啟用身分認證
 app.UseAuthentication();
 app.UseAuthorization();
 

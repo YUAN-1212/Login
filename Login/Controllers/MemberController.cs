@@ -1,24 +1,35 @@
 ﻿using Application.Member;
 using Application.Member.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Policy;
 
 namespace Login.Controllers
 {
+    //[Authorize]
     public class MemberController : Controller
     {
         private readonly IMemberRepository _service;
+        //private readonly UserManager<IdentityUser> userManager;
+        //private readonly SignInManager<IdentityUser> signInManager;
 
         // session 使用的參數
         const string Email = "Email";
         const string userName = "_UserName";
 
-        public MemberController(IMemberRepository service)
+        public MemberController(IMemberRepository service
+            //, UserManager<IdentityUser> userManager
+            //, SignInManager<IdentityUser> signInManager
+            )
         {
             _service = service;
+            //this.userManager = userManager;
+            //this.signInManager = signInManager;
         }
 
+        //[AllowAnonymous]
         public IActionResult Login()
         {
             return View();
@@ -28,6 +39,7 @@ namespace Login.Controllers
         /// 頁面一載入，先檢查有無登入過
         /// </summary>
         /// <returns></returns>
+        //[AllowAnonymous]
         [HttpPost]
         public IActionResult checkLogin() 
         {
@@ -63,7 +75,7 @@ namespace Login.Controllers
         /// <param name="login"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult DoLogin([FromBody] LoginDto login)
+        public async Task<IActionResult> DoLogin([FromBody] LoginDto login)
         {
             if (string.IsNullOrEmpty(login.Email))
             {
@@ -89,6 +101,7 @@ namespace Login.Controllers
                 HttpContext.Session.SetString(Email, login.Email); 
                 HttpContext.Session.SetString("UserLogin", "Y"); //Y: 使用者已登入; N:使用者未登入OR登入失敗
 
+
                 url = "/Member/Blank";
             }
             else
@@ -101,6 +114,8 @@ namespace Login.Controllers
 
         public IActionResult Blank()
         {
+          
+
             return View();
         }        
 
@@ -114,6 +129,23 @@ namespace Login.Controllers
             //登出要清除
             //HttpContext.Session.Clear();
             return View();
+        }
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        //[HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            // 登出要清除
+            //HttpContext.Session.Clear();
+
+            Response.Cookies.Delete(Email);
+            Response.Cookies.Delete("UserLogin");
+
+            //await signInManager.SignOutAsync();
+            return RedirectToAction("Login");
         }
     }
 }
