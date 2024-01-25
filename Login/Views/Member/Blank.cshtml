@@ -1,13 +1,119 @@
 ﻿@{
-    ViewData["Title"] = "空白頁";
+    ViewData["Title"] = "個人資料";
 }
+
+<style>
+    .frame {
+        height: 300px; /*can be anything*/
+        width: 300px; /*can be anything*/
+        position: relative;
+        border: dotted 3px #514a4a5e;
+    }
+
+    .profliePhoto {
+        max-height: 100%;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+
+    textarea {
+        white-space: nowrap; /* 禁止換行 */
+        overflow: hidden; /* 不顯示捲軸 */
+        resize: none; /* 禁止瀏覽器拖放區塊大小 */
+    }
+
+</style>
 
 <!-- Begin Page Content -->
 <div class="container-fluid" id="myContent">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+    <h1 class="h3 mb-4 text-gray-800">個人資料</h1>
 
+    <div class="row align-items-start">
+        <div class="col">
+            <div class="frame">
+                <img src="~/img/profile_empty.jpeg" class="rounded mx-auto d-block img-responsive profliePhoto"
+                     alt="個人頭像">
+            </div>
+            <div class="input-group col-lg-6 p-2">
+                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>
+            </div>
+            <h1 class="display-3 mb-1">管理員</h1>
+
+            <div class="input-group">
+                <a class="btn btn-success btn-icon-split" role="button">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span class="text">修改資料</span>
+                </a>
+                <a class="btn btn-danger btn-icon-split" role="button">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                    <span class="text">刪除此帳號</span>
+                </a>
+             </div>
+           
+        </div>
+        <div class="col">
+            <div class="form-floating mb-3">
+                <textarea class="form-control textarea" placeholder="帳號" id="accountInput" disabled>ss</textarea>
+                <label for="accountInput">帳號</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+                <label for="emailInput">信箱</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="uaerNameInput" placeholder="使用者名稱">
+                <label for="uaerNameInput">使用者名稱</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="sexSelect" aria-label="性別">
+                    @* <option selected>性別</option> *@
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                    <option value="0">不透露</option>
+                </select>
+                <label for="sexSelect">性別</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="cellPhoneInput" placeholder="手機">
+                <label for="cellPhoneInput">手機</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input id="startDate" class="form-control" type="date" placeholder="Start" />
+                <span id="startDateSelected"></span>
+                <label for="startDate">生日</label>
+            </div>
+
+            <div class="form">
+                <label class="text-lg col-form-label pe-3">帳號狀態</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                    <label class="form-check-label" for="inlineRadio1">啟用</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                    <label class="form-check-label" for="inlineRadio2">停用</label>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

@@ -113,13 +113,29 @@ namespace Login.Controllers
             return Json(new { vaild = isok.valid, url = url, msg = isok.message });
         }
 
+        #region ::: 個人資料頁 :::
+        /// <summary>
+        /// 個人資料頁
+        /// </summary>
+        /// <returns></returns>
         [ByCheck]
         public IActionResult Blank()
         {
-          
+            return View();
+        }
+
+        /// <summary>
+        /// 個人資料頁 - 取得個人資料
+        /// </summary>
+        /// <returns></returns>
+        [ByCheck]
+        public IActionResult GetMemberData()
+        {
+            string Email = HttpContext.Session.GetString("Email");
 
             return View();
         }
+        #endregion
 
         public IActionResult Blank2()
         {

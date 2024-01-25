@@ -21,11 +21,27 @@ CREATE TABLE IF NOT EXISTS "MemberData" (
 	"UpdateDate"	TEXT NOT NULL,
 	PRIMARY KEY("ID")
 );
+CREATE TABLE IF NOT EXISTS "AccountData" (
+	"ID"	INTEGER NOT NULL,
+	"MemberID"	INTEGER NOT NULL,
+	"BirthDay"	TEXT,
+	"CellPhone"	TEXT,
+	"Photo"	TEXT,
+	"Role"	INTEGER NOT NULL,
+	"CreateDate"	TEXT NOT NULL,
+	"CreateUser"	TEXT NOT NULL,
+	"UpdateDate"	TEXT NOT NULL,
+	"UpdateUser"	TEXT NOT NULL,
+	PRIMARY KEY("ID")
+);
 INSERT INTO "CodeTable" VALUES (1,'Sex','性別','1','男',1,'2024-01-15','2024-01-15');
 INSERT INTO "CodeTable" VALUES (2,'Sex','性別','2','女',1,'2024-01-15','2024-01-15');
 INSERT INTO "CodeTable" VALUES (3,'Sex','性別','0','不透露',1,'2024-01-15','2024-01-15');
+INSERT INTO "CodeTable" VALUES (4,'RoleID','腳色權限','1','系統管理員',1,'2024-01-24','2024-01-24');
+INSERT INTO "CodeTable" VALUES (5,'RoleID','腳色權限','2','一般使用者',1,'2024-01-24','2024-01-24');
 INSERT INTO "MemberData" VALUES (1,'莉莉','Lily','202CB962AC59075B964B07152D234B70',2,'lily@gmail.com','2024-01-15','2024-01-15');
 INSERT INTO "MemberData" VALUES (2,'大明','Bob','202CB962AC59075B964B07152D234B70',1,'Bob@gmail.com','2024-01-15','2024-01-15');
 INSERT INTO "MemberData" VALUES (3,'小汪汪','Tim','202CB962AC59075B964B07152D234B70',1,'Tim@gmail.com','2024-01-15','2024-01-15');
 INSERT INTO "MemberData" VALUES (4,'魚兒水中飄','Fish','202CB962AC59075B964B07152D234B70',0,'Fish@gmail.com','2024-01-15','2024-01-15');
+INSERT INTO "AccountData" VALUES (1,1,'1989-01-19',NULL,NULL,1,'2024-01-24','Lily','2024-01-24','Lily');
 COMMIT;
