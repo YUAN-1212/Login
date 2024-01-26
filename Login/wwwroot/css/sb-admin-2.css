@@ -60,7 +60,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 /** 自己調整 */
 #main{
-    height: 100vh;
+    /*height: 100vh;*/
 }
 
 body {

@@ -29,6 +29,12 @@
         resize: none; /* 禁止瀏覽器拖放區塊大小 */
     }
 
+    .inputHeight {
+        height: 58px;
+    }
+
+
+
 </style>
 
 <!-- Begin Page Content -->
@@ -62,41 +68,36 @@
                     </span>
                     <span class="text">刪除此帳號</span>
                 </a>
-             </div>
-           
+            </div>
+
         </div>
         <div class="col">
             <div class="form-floating mb-3">
-                <textarea class="form-control textarea" placeholder="帳號" id="accountInput" disabled>ss</textarea>
-                <label for="accountInput">帳號</label>
-            </div>
-
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+                <input type="email" class="form-control" id="emailInput" placeholder="name@example.com" v-model="form.email">
                 <label for="emailInput">信箱</label>
             </div>
-
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="uaerNameInput" placeholder="使用者名稱">
-                <label for="uaerNameInput">使用者名稱</label>
+                <textarea class="form-control textarea" placeholder="帳號" id="accountInput" disabled>{{form.Account}}</textarea>
+                <label for="accountInput">帳號</label>
             </div>
             <div class="form-floating mb-3">
-                <select class="form-select" id="sexSelect" aria-label="性別">
-                    @* <option selected>性別</option> *@
-                    <option value="1">男</option>
-                    <option value="2">女</option>
-                    <option value="0">不透露</option>
+                <input type="text" class="form-control" id="nameInput" placeholder="使用者名稱" v-model="form.Name">
+                <label for="nameInput">使用者名稱</label>
+            </div>
+            <div class="form-floating mb-3">
+                <select class="form-select" id="sexSelect" v-model="form.SexId">
+                    <option v-for="(item, index) in sexOptions" :value="item.id">
+                        {{ item.name }}
+                    </option>
                 </select>
                 <label for="sexSelect">性別</label>
             </div>
-
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="cellPhoneInput" placeholder="手機">
+                <input class="form-control" placeholder="手機" id="cellPhoneInput" v-model="form.CellPhone">
                 <label for="cellPhoneInput">手機</label>
             </div>
-
             <div class="form-floating mb-3">
-                <input id="startDate" class="form-control" type="date" placeholder="Start" />
+                <input id="startDate" class="form-control" type="date" placeholder="生日" v-model="form.BirthDay" />
                 <span id="startDateSelected"></span>
                 <label for="startDate">生日</label>
             </div>
@@ -104,12 +105,12 @@
             <div class="form">
                 <label class="text-lg col-form-label pe-3">帳號狀態</label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
-                    <label class="form-check-label" for="inlineRadio1">啟用</label>
+                    <input class="form-check-input" type="radio" name="Status1" id="Status1" value="1" v-model="form.Status">
+                    <label class="form-check-label" for="Status1">啟用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                    <label class="form-check-label" for="inlineRadio2">停用</label>
+                    <input class="form-check-input" type="radio" name="Status0" id="Status0" value="0" v-model="form.Status">
+                    <label class="form-check-label" for="Status0">停用</label>
                 </div>
             </div>
         </div>
@@ -120,24 +121,89 @@
 
 
 <script>
-    const app1 = Vue.createApp({
+   
+
+    const blank01 = Vue.createApp({
         data() {
             return {
-                Message: '123',
+                sexOptions: [
+                    {
+                        id: 99,
+                        name: '請選擇'
+                    },
+                    {
+                        id: 1,
+                        name: '男'
+                    }, {
+                        id: 2,
+                        name: '女'
+                    }, {
+                        id: 0,
+                        name: '不透漏'
+                    }],
+
+
+                form: {
+                    // MemberID: 0
+                    // , Account: ""
+                    // , Name: ""
+                    // , Email: ""
+                    // , SexId: 99
+                    // , Sex: ""
+                    // , BirthDay: ""
+                    // , CellPhone: ""
+                    // , Photo: ""
+                    // , RoleId: 0
+                    // , Role: ""
+                    // , Status: 0
+                }
             }
         },
         mounted() {
-            console.log('mounted app2');
+            console.log('mounted 個人資料');
 
+            this.getData();
         },
         methods: {
-            /** 進行登出 */
-            Logout(e) {
-                window.location.href = '@Url.Action("Logut", "Member")';
-                //window.location.href = '/Member/Login';
+            /** 取得帳號資料 */
+            getData(e) {
+                axios
+                    .post('/Member/GetMemberData',
+                       null ,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json; charset=utf-8',
+                            }
+                        }
+                    )
+                    .then(response => {
+                        $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
+
+                        setTimeout(() => {
+                            $.unblockUI();
+
+                            if (response.data.vaild === true) {
+                                blank01.form.data = response.data.result;
+
+                                console.log(blank01.form.data);
+
+                                console.log(response.data);
+                            } else {
+                                alert(response.data.msg);
+                            }
+                        }, 1000);
+                    })
+                    .catch(function (error) { // 请求失败处理
+                        $.unblockUI();
+                        alert(error);
+                        console.log(error);
+                    })
             },
         },
     }).mount('#myContent')
 
-  
+    $(document).ready(function () {
+        $('#main').removeAttr('height');
+    });
+
 </script>

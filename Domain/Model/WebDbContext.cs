@@ -36,6 +36,11 @@ namespace Domain.Model
         /// 會員資料
         /// </summary>
         public DbSet<MemberData> MemberDatas { get; set; }
+
+        /// <summary>
+        /// 會員詳細資料
+        /// </summary>
+        public DbSet<AccountData> AccountDatas { get; set; }
         #endregion
     }
 }

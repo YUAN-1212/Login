@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Security.Policy;
 
 namespace Login.Controllers
@@ -128,12 +129,21 @@ namespace Login.Controllers
         /// 個人資料頁 - 取得個人資料
         /// </summary>
         /// <returns></returns>
-        [ByCheck]
+        [ByCheck, HttpPost]
         public IActionResult GetMemberData()
         {
-            string Email = HttpContext.Session.GetString("Email");
+            string Email = Request.Cookies["Email"].ToString();
 
-            return View();
+            if (!string.IsNullOrWhiteSpace(Email))
+            {
+                var obj = _service.GetMemberData(Email);
+
+                return Json(new { vaild = obj.valid, result = obj });
+            }
+            else
+            {
+                return Json(new { vaild = false, msg = "已被登出，請重新登入!", url= "~/Member/Login" });
+            }
         }
         #endregion
 

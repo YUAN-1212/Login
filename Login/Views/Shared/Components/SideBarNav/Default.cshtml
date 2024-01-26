@@ -1,6 +1,6 @@
 ﻿<body id="page-top" style="width: 100%;">
     <!-- Page Wrapper -->
-    <div id="wrapper">
+    <!--<div id="wrapper">-->
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -270,13 +270,12 @@
 
             </nav>
             <!-- Begin Page Content 內容-->
-            <div class="container-fluid" id="test">
-            </div>
+        <!-- <div class="container-fluid" id="test">
+            </div>-->
             <!-- /.container-fluid 內容-->
         </div>
         <!-- End of Topbar -->
-        
-    </div>
+    <!-- </div>-->
     <!-- End of Page Wrapper -->
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -308,7 +307,7 @@
     const subMenu = Vue.createApp({
         data() {
             return {
-                // message: 'Hello Vue 3.0',
+                message: 'Hello Vue 3.0',
                 // message2: '第二個訊息',
             }
         },
@@ -316,7 +315,7 @@
             console.log('mounted subMenu');
         },
         methods: {
-            /** 登入 */
+            /** 登出 */
             logout() {
                 $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
                 window.location = '@Url.Action("Logout")';
@@ -324,4 +323,5 @@
         },
     }).mount('#page-top')
 </script>
+
 

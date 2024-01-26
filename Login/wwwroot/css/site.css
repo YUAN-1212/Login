@@ -20,3 +20,15 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/** 自己調整 */
+#myContent {
+    position: absolute;
+    top: 90px;
+    left: 270px;
+    height: auto;
+    width: 80%;
+    padding: 20px;
+}
+
+

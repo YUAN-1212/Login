@@ -53,6 +53,7 @@
         <div id="sidebar" class="navbar-default navbar-static-side" role="navigation" style="z-index:28;">
             @await Component.InvokeAsync(typeof(SideBarNavViewComponent))
 
+
         </div>
     @*}*@
 
@@ -61,13 +62,13 @@
     @RenderBody()
     </div> *@
 
-    @* <div role="main" class="pb-3" id="main">
-    @RenderBody()
-    </div> *@
-    <main role="main" class="pb-3" id="main">
+    <div role="main" class="p-0" id="main">
+      @RenderBody()
+    </div>
+@*     <main role="main" class="pb-3" id="main">
         @RenderBody()
     </main>
-
+ *@
     <footer>
     </footer>
  
@@ -77,13 +78,13 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#main").hide();
+        //$("#main").hide();
 
         if (window.location.href.split('/')[4] !== '' && window.location.href.split('/')[4] !== undefined) {
             if (window.location.href.split('/')[4] !== 'login') {
-                var addressContainer = document.getElementById('myContent');
-                $('#test').append(addressContainer.innerHTML);
-                $("#main").hide();
+                // var addressContainer = document.getElementById('myContent99');
+                // $('#test').append(addressContainer.innerHTML);
+                //$("#main").hide();
             }
         } else {
             // 顯示-登入頁

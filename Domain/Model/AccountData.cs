@@ -28,23 +28,29 @@ namespace Domain.Model
         /// <summary>
         /// 生日 YYYY/MM/DD
         /// </summary>
-        public DateTime BirthDay { get; set; }
+        public DateTime? BirthDay { get; set; }
 
         /// <summary>
         /// 手機
         /// </summary>
-        public string CellPhone { get; set; }
+        public string? CellPhone { get; set; }
 
         /// <summary>
         /// 個人照片
         /// </summary>
-        public string Photo { get; set; }
+        public string? Photo { get; set; }
 
         /// <summary>
         /// 腳色
         /// 對應至 CodeTable 的 RoleID
         /// </summary>
         public int Role { get; set; }
+
+        /// <summary>
+        /// 帳號啟用狀態
+        /// 1: 啟用; 0: 停用
+        /// </summary>
+        public int Status { get; set; }
 
         /// <summary>
         /// 新增時間
@@ -54,7 +60,7 @@ namespace Domain.Model
         /// <summary>
         /// 新增的帳號
         /// </summary>
-        public string CreateUser { get; set; }
+        public string? CreateUser { get; set; }
 
         /// <summary>
         /// 更新時間
@@ -64,6 +70,6 @@ namespace Domain.Model
         /// <summary>
         /// 更新的帳號
         /// </summary>
-        public string UpdateUser { get; set; }
+        public string? UpdateUser { get; set; }
     }
 }
