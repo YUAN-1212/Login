@@ -145,6 +145,29 @@ namespace Login.Controllers
                 return Json(new { vaild = false, msg = "已被登出，請重新登入!", url= "~/Member/Login" });
             }
         }
+
+        /// <summary>
+        /// 個人資料頁 - 進行CRUD
+        /// </summary>
+        /// <param name="action">
+        /// 1: 新增
+        /// 2: 修改
+        /// 3: 刪除
+        /// </param>
+        /// <returns></returns>
+        [ByCheck, HttpPost]
+        public IActionResult crudMemberData(MemberDataDto model, int action)
+        {
+            if(action == 1 || action == 2 || action == 3)
+            {
+                var obj = _service.crudMemberData(model, action, Request.Cookies["Email"].ToString());
+                return Json(new { vaild = obj.valid, msg = obj.message });
+            }
+            else
+            {
+                return Json(new { vaild = false, msg = "無法辨識的操作" });
+            }
+        }
         #endregion
 
         public IActionResult Blank2()

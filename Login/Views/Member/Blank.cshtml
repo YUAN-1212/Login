@@ -53,10 +53,10 @@
                 <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
                 <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>
             </div>
-            <h1 class="display-3 mb-1">管理員</h1>
+            <h2 class="display-3 mb-1">{{form.role}}</h2>
 
             <div class="input-group">
-                <a class="btn btn-success btn-icon-split" role="button">
+                <a class="btn btn-success btn-icon-split" role="button" v-on:click="editData()">
                     <span class="icon text-white-50">
                         <i class="fas fa-check"></i>
                     </span>
@@ -77,15 +77,15 @@
                 <label for="emailInput">信箱</label>
             </div>
             <div class="form-floating mb-3">
-                <textarea class="form-control textarea" placeholder="帳號" id="accountInput" disabled>{{form.Account}}</textarea>
+                <textarea class="form-control textarea" placeholder="帳號" id="accountInput" disabled>{{form.account}}</textarea>
                 <label for="accountInput">帳號</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="nameInput" placeholder="使用者名稱" v-model="form.Name">
+                <input type="text" class="form-control" id="nameInput" placeholder="使用者名稱" v-model="form.name">
                 <label for="nameInput">使用者名稱</label>
             </div>
             <div class="form-floating mb-3">
-                <select class="form-select" id="sexSelect" v-model="form.SexId">
+                <select class="form-select" id="sexSelect" v-model="form.sexId">
                     <option v-for="(item, index) in sexOptions" :value="item.id">
                         {{ item.name }}
                     </option>
@@ -93,11 +93,11 @@
                 <label for="sexSelect">性別</label>
             </div>
             <div class="form-floating mb-3">
-                <input class="form-control" placeholder="手機" id="cellPhoneInput" v-model="form.CellPhone">
+                <input class="form-control" placeholder="手機" id="cellPhoneInput" v-model="form.cellPhone">
                 <label for="cellPhoneInput">手機</label>
             </div>
             <div class="form-floating mb-3">
-                <input id="startDate" class="form-control" type="date" placeholder="生日" v-model="form.BirthDay" />
+                <input id="startDate" class="form-control" type="date" placeholder="生日" v-model="form.birthDay" />
                 <span id="startDateSelected"></span>
                 <label for="startDate">生日</label>
             </div>
@@ -105,11 +105,11 @@
             <div class="form">
                 <label class="text-lg col-form-label pe-3">帳號狀態</label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="Status1" id="Status1" value="1" v-model="form.Status">
+                    <input class="form-check-input" type="radio" name="Status1" id="Status1" value="1" v-model="form.status">
                     <label class="form-check-label" for="Status1">啟用</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="Status0" id="Status0" value="0" v-model="form.Status">
+                    <input class="form-check-input" type="radio" name="Status0" id="Status0" value="0" v-model="form.status">
                     <label class="form-check-label" for="Status0">停用</label>
                 </div>
             </div>
@@ -144,18 +144,18 @@
 
 
                 form: {
-                    // MemberID: 0
-                    // , Account: ""
-                    // , Name: ""
-                    // , Email: ""
-                    // , SexId: 99
-                    // , Sex: ""
-                    // , BirthDay: ""
-                    // , CellPhone: ""
-                    // , Photo: ""
-                    // , RoleId: 0
-                    // , Role: ""
-                    // , Status: 0
+                    MemberID: 0
+                    , Account: ""
+                    , Name: ""
+                    , Email: ""
+                    , SexId: 99
+                    , Sex: ""
+                    , BirthDay: ""
+                    , CellPhone: ""
+                    , Photo: ""
+                    , RoleId: 0
+                    , Role: ""
+                    , Status: 0
                 }
             }
         },
@@ -183,11 +183,7 @@
                             $.unblockUI();
 
                             if (response.data.vaild === true) {
-                                blank01.form.data = response.data.result;
-
-                                console.log(blank01.form.data);
-
-                                console.log(response.data);
+                                blank01.form = response.data.result;
                             } else {
                                 alert(response.data.msg);
                             }
@@ -198,6 +194,10 @@
                         alert(error);
                         console.log(error);
                     })
+            },
+            /** 修改資料 */
+            editData(e){
+
             },
         },
     }).mount('#myContent')

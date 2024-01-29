@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Application.Infrastructure
 {
@@ -26,6 +27,44 @@ namespace Application.Infrastructure
 
                 return md5;
             }
+        }
+
+        /// <summary>
+        /// 檢查email格式
+        /// </summary>
+        /// <param name="txtemail"></param>
+        /// <returns></returns>
+        public static bool checkEmail(string emailInput)
+        {
+            string email = emailInput;
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(email);
+            return match.Success;
+        }
+
+        /// <summary>
+        /// 檢查手機格式
+        /// </summary>
+        /// <param name="phoneInput"></param>
+        /// <returns></returns>
+        public static bool checkCellPhone(string phoneInput)
+        {
+            string phone = phoneInput;
+            Regex regex = new Regex(@"^09[0-9]{8}$");
+            Match match = regex.Match(phoneInput);
+            return match.Success;
+        }
+
+        /// <summary>
+        /// https://blog.uwinfo.com.tw/auth/article/reiko/378
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public static object GetPropertyValue(object obj, string property)
+        {
+            System.Reflection.PropertyInfo propertyInfo = obj.GetType().GetProperty(property);
+            return propertyInfo.GetValue(obj, null);
         }
     }
 }
