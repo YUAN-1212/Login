@@ -46,11 +46,11 @@
     <div class="row align-items-start">
         <div class="col">
             <div class="frame">
-                <img src="~/img/profile_empty.jpeg" class="rounded mx-auto d-block img-responsive profliePhoto"
+                <img :src="form.photo" class="rounded mx-auto d-block img-responsive profliePhoto"
                      alt="個人頭像">
             </div>
             <div class="input-group col-lg-6 p-2">
-                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <input type="file" class="form-control" id="inputGroupFile04" v-on:change="fileSelected">
                 <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Button</button>
             </div>
             <h2 class="display-3 mb-1">{{form.role}}</h2>
@@ -73,7 +73,7 @@
         </div>
         <div class="col">
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="emailInput" placeholder="name@example.com" v-model="form.email">
+                <input type="email" class="form-control" id="emailInput" placeholder="name@example.com" v-model="form.email" v-debounce:300="emailCheck">
                 <label for="emailInput">信箱</label>
             </div>
             <div class="form-floating mb-3">
@@ -81,11 +81,11 @@
                 <label for="accountInput">帳號</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="nameInput" placeholder="使用者名稱" v-model="form.name">
+                <input type="text" class="form-control" id="nameInput" v-model="form.name" v-debounce:300="nameCheck" placeholder="使用者名稱">
                 <label for="nameInput">使用者名稱</label>
-            </div>
+            </div>           
             <div class="form-floating mb-3">
-                <select class="form-select" id="sexSelect" v-model="form.sexId">
+                <select class="form-select" id="sexSelect" v-model="form.sexId" v-debounce:300="sexCheck">
                     <option v-for="(item, index) in sexOptions" :value="item.id">
                         {{ item.name }}
                     </option>
@@ -93,15 +93,14 @@
                 <label for="sexSelect">性別</label>
             </div>
             <div class="form-floating mb-3">
-                <input class="form-control" placeholder="手機" id="cellPhoneInput" v-model="form.cellPhone">
+                <input class="form-control" placeholder="手機" id="cellPhoneInput" v-model="form.cellPhone" v-debounce:300="cellPhoneCheck">
                 <label for="cellPhoneInput">手機</label>
             </div>
             <div class="form-floating mb-3">
-                <input id="startDate" class="form-control" type="date" placeholder="生日" v-model="form.birthDay" />
-                <span id="startDateSelected"></span>
-                <label for="startDate">生日</label>
+                <input id="birthDay" class="form-control" type="date" placeholder="生日" v-model="form.birthDay" v-debounce:300="birthDayCheck" />
+                <span id="birthDaySelected"></span>
+                <label for="birthDay">生日</label>
             </div>
-
             <div class="form">
                 <label class="text-lg col-form-label pe-3">帳號狀態</label>
                 <div class="form-check form-check-inline">
@@ -120,7 +119,15 @@
 
 
 
-<script>
+<script>    
+    // 在你的 Vue 3 项目中定义一个全局指令
+    const debounce = (fn, delay) => {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+        };
+    };
    
 
     const blank01 = Vue.createApp({
@@ -159,9 +166,19 @@
                 }
             }
         },
+        directives: {
+            debounce: ("debounce", {
+                // 綁定DOM的父組件被掛載時調用
+                mounted(el, binding) {                    
+                    el.addEventListener('input', debounce(() => {
+                        binding.value();
+                    }, parseInt(binding.arg) || 300));
+                }
+            })
+        },
         mounted() {
             console.log('mounted 個人資料');
-
+            
             this.getData();
         },
         methods: {
@@ -169,7 +186,7 @@
             getData(e) {
                 axios
                     .post('/Member/GetMemberData',
-                       null ,
+                       null,
                         {
                             headers: {
                                 'Content-Type': 'application/json; charset=utf-8',
@@ -197,10 +214,175 @@
             },
             /** 修改資料 */
             editData(e){
+                if (this.validateForm()) {
+                    let action = 4;
+                    action = blank01.form.MemberID === 0 ? 1 : 2;
 
+                    const postData = {
+                        model: blank01.form,
+                        imgPhoto: blank01.form.photo,
+                        action: action,
+                    };
+
+                    axios
+                        .post('/Member/crudMemberData',
+                            postData,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json; charset=utf-8',
+                                }
+                            }
+                        )
+                        .then(response => {
+                            $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
+
+                            setTimeout(() => {
+                                $.unblockUI();
+
+                                if (response.data.vaild === true) {
+                                    blank01.form = response.data.result;
+                                } else {
+                                    alert(response.data.msg);
+                                }
+                            }, 1000);
+                        })
+                        .catch(function (error) { // 请求失败处理
+                            $.unblockUI();
+                            alert(error);
+                            console.log(error);
+                        })
+
+                } else{
+                    alert('表單驗證 不 通過!!!!!!!');
+                }
+            },
+             
+            //#region  // 在你的组件中使用 debounce 指令
+            /** Email檢查 */
+            emailCheck() {
+                $('input[type="email"]').css('border-color', 'red');
+
+                if (blank01.form.email === '') {
+                    alert('Email 不可為空白');
+                    return false;
+                } else {
+                    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                    if (!blank01.form.email.match(validRegex)) {
+                        alert('Email 格式錯誤');
+                        return false;
+                    }
+                }
+
+                if (true) {
+                    $('input[type="email"]').removeAttr('style');
+                    return true;
+                }
+            },
+            /** 使用者名稱檢查 */
+            nameCheck() {
+                $('#nameInput').css('border-color', 'red');
+
+                if (blank01.form.name === '') {
+                    alert('使用者名稱 不可為空白');
+                    return false;
+                }
+
+                if (true) {
+                    $('#nameInput').removeAttr('style');
+                    return true;
+                }
+            },
+            /** 性別下拉式選單檢查 */
+            sexCheck() {
+                $('#sexSelect').css('border-color', 'red');
+
+                if (blank01.form.sexId == 99) {
+                    alert('請選擇性別');
+                    return false;
+                }
+
+                if (true) {
+                    $('#sexSelect').removeAttr('style');
+                    return true;
+                }
+            },
+            /** 手機檢查 */
+            cellPhoneCheck() {
+                $('#cellPhoneInput').css('border-color', 'red');
+
+                if (blank01.form.cellPhone !== '' && blank01.form.cellPhone !== null) {
+                    var validRegex = /^09[0-9]{8}$/;
+                    if (!blank01.form.cellPhone.match(validRegex)) {
+                        alert('手機 格式錯誤');
+                        return false;
+                    }
+                }
+
+                if (true) {
+                    $('#cellPhoneInput').removeAttr('style');
+                    return true;
+                }
+            },
+            /** 生日檢查 */
+            birthDayCheck() {
+                $('#birthDay').css('border-color', 'red');
+
+                if (!this.validateDate(blank01.form.birthDay)) {
+                    alert('生日日期 格式錯誤');
+                    return false;
+                }
+
+                if (true) {
+                    $('#birthDay').removeAttr('style');
+                    return true;
+                }
+            },
+            //#endregion
+           
+            
+            /** 日期格式檢查 */
+            validateDate(dtValue) {
+                var dtRegex = new RegExp(/^[0-9]{4}[/\-](0[1-9]|1[012])[/\-](0[1-9]|[12][0-9]|3[01])$/);
+                return dtRegex.test(dtValue);
+            },
+            /** 驗證表單 */
+            validateForm() {
+                if (!this.emailCheck()) {
+                    return false;
+                }
+                
+                if (!this.nameCheck()) {
+                    return false;
+                }
+
+                if (!this.sexCheck()) {
+                    return false;
+                }
+
+                if (!this.cellPhoneCheck()) {
+                    return false;
+                }
+
+                if (!this.birthDayCheck()) {
+                    return false;
+                }
+
+                if (true) { 
+                    return true;
+                }
+            },
+            fileSelected(e) {
+                const file = e.target.files.item(0);
+                const reader = new FileReader();
+                reader.addEventListener('load', this.imageLoaded);
+                reader.readAsDataURL(file);
+            },
+            imageLoaded(e) {
+                blank01.form.Photo = e.target.result;
             },
         },
     }).mount('#myContent')
+    //blank01.directive('debounce', debounceDirective);
 
     $(document).ready(function () {
         $('#main').removeAttr('height');

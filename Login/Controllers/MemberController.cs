@@ -156,7 +156,7 @@ namespace Login.Controllers
         /// </param>
         /// <returns></returns>
         [ByCheck, HttpPost]
-        public IActionResult crudMemberData(MemberDataDto model, int action)
+        public IActionResult crudMemberData([FromBody] MemberDataDto model, IFormFile imgPhoto, int action)
         {
             if(action == 1 || action == 2 || action == 3)
             {

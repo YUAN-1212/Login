@@ -70,7 +70,7 @@ namespace Application.Member
 
                         member.BirthDay = a.BirthDay.HasValue ? a.BirthDay?.ToString("yyyy-MM-dd") : null;                        
                         member.CellPhone = a.CellPhone;
-                        member.Photo = (a.Photo != null || a.Photo != "") ? a.Photo : "~/img/profile_empty.jpeg";
+                        member.Photo = (a.Photo != null && a.Photo != "") ? a.Photo : "~/assets/img/profile_empty.jpeg";
                         member.RoleId = a.Role;
 
                         string role = a.Role.ToString();
