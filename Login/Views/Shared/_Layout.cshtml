@@ -81,10 +81,14 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        //$("#main").hide();
-
+        //$("#main").hide();        
         if (window.location.href.split('/')[4] !== '' && window.location.href.split('/')[4] !== undefined) {
             if (window.location.href.split('/')[4] !== 'login') {
+                if (window.location.href.split('/')[4] === 'Register') {
+                    // 註冊頁面，把側邊欄隱藏
+                    $('#sidebar').hide();
+                    $("#main").show();
+                }
                 // var addressContainer = document.getElementById('myContent99');
                 // $('#test').append(addressContainer.innerHTML);
                 //$("#main").hide();

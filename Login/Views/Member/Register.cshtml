@@ -1,0 +1,141 @@
+﻿@{
+    ViewData["Title"] = "註冊";
+    //Layout = "";
+}
+
+<div class="bg-gradient-primary">
+    <div class="container" id="register">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                        <div class="col-lg-7">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">創建一個新帳號!</h1>
+                                </div>
+                                <form class="user">
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                                   v-model="Account" name="Account"
+                                                   placeholder="帳號">
+                                        </div>
+                                        <div class="col-sm-6 mb-3 mb-sm-0" style="color:red">
+                                            <span>請注意!</span> <br />
+                                            <span>只能輸入英文加數字的組合</span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                               v-model="Email" name="Email"
+                                               v-debounce:300="emailCheck"
+                                               placeholder="信箱">
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <input type="password" class="form-control form-control-user"
+                                                   v-model="Password" name="Password"
+                                                   id="exampleInputPassword" placeholder="密碼">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="password" class="form-control form-control-user"
+                                                   v-model="Password" name="Password"
+                                                   id="exampleRepeatPassword" placeholder="再次輸入">
+                                        </div>
+                                    </div>
+                                    <a href="login.html" class="btn btn-primary btn-user btn-block">
+                                        註冊帳號
+                                    </a>                                    
+                                </form>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="@Url.Action("Login")">已經有帳號？ 登入！</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 在你的 Vue 3 项目中定义一个全局指令
+        const debounce = (fn, delay) => {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn(...args), delay);
+            };
+        };
+
+        const register = Vue.createApp({
+            data() {
+                return {
+                    message: 'Hello Vue 3.0',
+                    Account: '',
+                    Email: '',
+                    Password: '',
+                    Password: '',
+                }
+            },
+            mounted() {
+                console.log('註冊畫面');
+            },
+            directives: {
+                debounce: ("debounce", {
+                    // 綁定DOM的父組件被掛載時調用
+                    mounted(el, binding) {
+                        el.addEventListener('input', debounce(() => {
+                            binding.value();
+                        }, parseInt(binding.arg) || 300));
+                    }
+                })
+            },
+            methods: {
+                
+                
+            
+                /** Email檢查 */
+                emailCheck() {
+                    $('input[type="email"]').css('border-color', 'red');
+
+                    if (app1.Email === '') {
+                        alert('Email 不可為空白');
+                        return false;
+                    } else {
+                        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+                        if (!app1.Email.match(validRegex)) {
+                            alert('Email 格式錯誤');
+                            return false;
+                        }
+                    }
+
+                    if (true) {
+                        $('input[type="email"]').removeAttr('style');
+                        return true;
+                    }
+                },
+                /** 密碼檢查 */
+                PasswordCheck() {
+                    if (app1.Password === '') {
+                        $('input[type="password"]').css('border-color', 'red');
+                        alert('Password 不可為空白');
+                        return false;
+                    } else {
+                        $('input[type="password"]').removeAttr('style');
+                        return true;
+                    }
+                },
+            },
+        }).mount('#register')
+    </script>
+
+</div>

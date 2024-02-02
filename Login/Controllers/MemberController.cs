@@ -120,6 +120,14 @@ namespace Login.Controllers
             return Json(new { vaild = isok.valid, url = url, msg = isok.message });
         }
 
+        #region ::: 註冊 :::
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        #endregion
+
         #region ::: 個人資料頁 :::
         /// <summary>
         /// 個人資料頁
@@ -204,7 +212,7 @@ namespace Login.Controllers
 
                 //string fileExt = Path.GetExtension(fileInfo.FileName).ToLower();
                 string name = fileInfo.FileName.Split('.')[0];
-                var savePath = Path.Combine(folderPath, !string.IsNullOrWhiteSpace(newFileName) ?? $"{name}.jpg");
+                var savePath = Path.Combine(folderPath, $"{name}.jpg");
                 if (System.IO.File.Exists(savePath))
                 {
                     FileInfo file = new FileInfo(savePath);
@@ -218,6 +226,8 @@ namespace Login.Controllers
         }
 
         #endregion
+
+
 
         public IActionResult Blank2()
         {
