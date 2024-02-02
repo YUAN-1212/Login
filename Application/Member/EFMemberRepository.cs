@@ -8,6 +8,7 @@ namespace Application.Member
     public class EFMemberRepository : IMemberRepository
     {
         private readonly WebDbContext db = new WebDbContext();
+        private readonly string root = "wwwroot";
 
         /// <summary>
         /// 登入
@@ -70,7 +71,10 @@ namespace Application.Member
 
                         member.BirthDay = a.BirthDay.HasValue ? a.BirthDay?.ToString("yyyy-MM-dd") : null;                        
                         member.CellPhone = a.CellPhone;
-                        member.Photo = (a.Photo != null && a.Photo != "") ? a.Photo : "~/assets/img/profile_empty.jpeg";
+
+                        member.Photo = (a.Photo != null && a.Photo != "") ? (@$"photo\" + a.Photo) : "profile_empty";
+                        member.base64String = Convert.ToBase64String(File.ReadAllBytes(@$"{root}\img\{member.Photo}.jpg"));
+
                         member.RoleId = a.Role;
 
                         string role = a.Role.ToString();
@@ -196,7 +200,7 @@ namespace Application.Member
                         // 修改 AccountData 會員明細資料表
                         account.BirthDay = Convert.ToDateTime(model.BirthDay);
                         account.CellPhone = model.CellPhone;
-                        account.Photo = model.Photo;
+                        account.Photo = model.Photo.Split('.')[0];
                         account.Role = model.RoleId;
                         account.Status = model.Status;
                         account.UpdateUser = user;
@@ -249,5 +253,7 @@ namespace Application.Member
                 return message;
             }
         }
+
+       
     }
 }

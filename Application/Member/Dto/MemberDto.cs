@@ -40,9 +40,14 @@ namespace Application.Member.Dto
         public string CellPhone { get; set; }
 
         /// <summary>
-        /// 圖片連結，如無，則用預設圖片
+        /// 圖片檔名，如無，則用預設圖片
         /// </summary>
         public string Photo { get; set; }
+
+        /// <summary>
+        /// 圖片(base64)
+        /// </summary>
+        public string base64String { get; set; }
 
         /// <summary>
         /// 權限代碼

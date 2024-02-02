@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Security.Policy;
+using Microsoft.AspNetCore.Http; // for IFormFile and IFormFileCollection
+
 
 namespace Login.Controllers
 {
@@ -14,6 +16,8 @@ namespace Login.Controllers
     public class MemberController : Controller
     {
         private readonly IMemberRepository _service;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly string root = "wwwroot";
         //private readonly UserManager<IdentityUser> userManager;
         //private readonly SignInManager<IdentityUser> signInManager;
 
@@ -22,11 +26,13 @@ namespace Login.Controllers
         const string userName = "_UserName";
 
         public MemberController(IMemberRepository service
+            , IWebHostEnvironment webHostEnvironment
             //, UserManager<IdentityUser> userManager
             //, SignInManager<IdentityUser> signInManager
             )
         {
             _service = service;
+            _webHostEnvironment = webHostEnvironment;
             //this.userManager = userManager;
             //this.signInManager = signInManager;
         }
@@ -156,18 +162,61 @@ namespace Login.Controllers
         /// </param>
         /// <returns></returns>
         [ByCheck, HttpPost]
-        public IActionResult crudMemberData([FromBody] MemberDataDto model, IFormFile imgPhoto, int action)
+        public IActionResult crudMemberData(MemberDataDto model, string imgPhoto, IFormFile fileInfo, int action)//[FromBody]
         {
             if(action == 1 || action == 2 || action == 3)
-            {
+            {   
                 var obj = _service.crudMemberData(model, action, Request.Cookies["Email"].ToString());
+
+                if (obj.valid)
+                {
+                    // 修改名為 "Email" 的 Cookie 的值
+                    Response.Cookies.Append("Email", model.Email);
+
+                    this.UploadFile(model.Photo, fileInfo);
+                }
                 return Json(new { vaild = obj.valid, msg = obj.message });
+
+                //return Json(new { vaild = false, msg = "無法辨識的操作" });
             }
             else
             {
                 return Json(new { vaild = false, msg = "無法辨識的操作" });
             }
         }
+
+        /// <summary>
+        /// 上傳照片
+        /// </summary>
+        /// <param name="newFileName">新檔名稱</param>
+        /// <param name="fileInfo">檔案內容</param>
+        private void UploadFile(string newFileName, IFormFile fileInfo)
+        {
+            if (fileInfo != null)
+            {
+                var folderPath = @$"{root}\img\photo";
+
+                // 上傳新檔
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                //string fileExt = Path.GetExtension(fileInfo.FileName).ToLower();
+                string name = fileInfo.FileName.Split('.')[0];
+                var savePath = Path.Combine(folderPath, !string.IsNullOrWhiteSpace(newFileName) ?? $"{name}.jpg");
+                if (System.IO.File.Exists(savePath))
+                {
+                    FileInfo file = new FileInfo(savePath);
+                    file.Delete();
+                }
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    fileInfo.CopyTo(stream);
+                };
+            }
+        }
+
         #endregion
 
         public IActionResult Blank2()

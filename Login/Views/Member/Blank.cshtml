@@ -46,7 +46,7 @@
     <div class="row align-items-start">
         <div class="col">
             <div class="frame">
-                <img :src="form.photo" class="rounded mx-auto d-block img-responsive profliePhoto"
+                <img v-bind:src="'data:image/jpeg;base64,'+ form.base64String" class="rounded mx-auto d-block img-responsive profliePhoto"
                      alt="個人頭像">
             </div>
             <div class="input-group col-lg-6 p-2">
@@ -128,7 +128,6 @@
             timer = setTimeout(() => fn(...args), delay);
         };
     };
-   
 
     const blank01 = Vue.createApp({
         data() {
@@ -149,6 +148,7 @@
                         name: '不透漏'
                     }],
 
+                imageType: 'data:image/jpeg;base64,',
 
                 form: {
                     MemberID: 0
@@ -160,10 +160,12 @@
                     , BirthDay: ""
                     , CellPhone: ""
                     , Photo: ""
+                    , base64String: ""
                     , RoleId: 0
                     , Role: ""
                     , Status: 0
-                }
+                },
+                files: new FormData(),
             }
         },
         directives: {
@@ -218,18 +220,19 @@
                     let action = 4;
                     action = blank01.form.MemberID === 0 ? 1 : 2;
 
-                    const postData = {
-                        model: blank01.form,
-                        imgPhoto: blank01.form.photo,
-                        action: action,
-                    };
-
                     axios
                         .post('/Member/crudMemberData',
-                            postData,
+                            {
+                                model: blank01.form,
+                                imgPhoto: blank01.form.photo,
+                                action: action,
+                                fileInfo: blank01.files,
+                            },
                             {
                                 headers: {
-                                    'Content-Type': 'application/json; charset=utf-8',
+                                    //multipart/form-data // => 搭配檔案上傳
+                                    //application/x-www-form-urlencoded; charset=utf-8 // => 無檔案用這個就好
+                                    'Content-Type': 'multipart/form-data',
                                 }
                             }
                         )
@@ -240,7 +243,7 @@
                                 $.unblockUI();
 
                                 if (response.data.vaild === true) {
-                                    blank01.form = response.data.result;
+                                    alert(response.data.msg);                                    
                                 } else {
                                     alert(response.data.msg);
                                 }
@@ -376,9 +379,11 @@
                 const reader = new FileReader();
                 reader.addEventListener('load', this.imageLoaded);
                 reader.readAsDataURL(file);
+                blank01.form.photo = file.name;
+                blank01.files = file;
             },
             imageLoaded(e) {
-                blank01.form.Photo = e.target.result;
+                blank01.form.base64String = e.target.result.split(',')[1];
             },
         },
     }).mount('#myContent')

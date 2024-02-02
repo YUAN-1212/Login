@@ -5,6 +5,7 @@ using Login.Filter;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//設定預設文件，要在 UseStaticFiles 之前
+//app.UseDefaultFiles();
+//啟用 wwwroot 靜態檔案功能
+//app.UseFileServer();
 app.UseStaticFiles();
 
 app.UseRouting();
