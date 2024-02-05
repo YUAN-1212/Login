@@ -24,5 +24,12 @@ namespace Application.Member
         /// </param>
         /// <param name="email">新增/更新 使用者的 email</param>
         MessageResult crudMemberData(MemberDataDto model,int action, string email);
+
+        /// <summary>
+        /// 註冊帳號
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        MessageResult registerData(RegisterDto model);
     }
 }

@@ -21,8 +21,9 @@
                                 <form class="user">
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                            <input type="text" class="form-control form-control-user" id="exampleAccount"
                                                    v-model="Account" name="Account"
+                                                   v-debounce:500="accountCheck"
                                                    placeholder="帳號">
                                         </div>
                                         <div class="col-sm-6 mb-3 mb-sm-0" style="color:red">
@@ -32,24 +33,43 @@
                                         
                                     </div>
                                     <div class="form-group">
+                                        <input type="text" class="form-control form-control-user" id="exampleInputName"
+                                               v-model="Name" name="Name"
+                                               v-debounce:500="nameCheck"
+                                               placeholder="名字">
+                                    </div>
+
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="sexSelect" v-model="sexId" v-debounce:500="sexCheck">
+                                            <option v-for="(item, index) in sexOptions" :value="item.id">
+                                                {{ item.name }}
+                                            </option>
+                                        </select>
+                                        <label for="sexSelect">性別</label>
+                                    </div>
+
+                                    <div class="form-group">
                                         <input type="email" class="form-control form-control-user" id="exampleInputEmail"
                                                v-model="Email" name="Email"
-                                               v-debounce:300="emailCheck"
+                                               v-debounce:500="emailCheck"
                                                placeholder="信箱">
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-sm-6 mb-3 mb-sm-0">
                                             <input type="password" class="form-control form-control-user"
-                                                   v-model="Password" name="Password"
-                                                   id="exampleInputPassword" placeholder="密碼">
+                                                   v-model="Password" name="Password" id="exampleInputPassword"
+                                                   v-debounce:500="PasswordCheck"
+                                                   placeholder="密碼">
                                         </div>
                                         <div class="col-sm-6">
                                             <input type="password" class="form-control form-control-user"
-                                                   v-model="Password" name="Password"
-                                                   id="exampleRepeatPassword" placeholder="再次輸入">
+                                                   v-model="Password2" name="Password2" id="exampleInputPassword2"
+                                                   v-debounce:500="RepeatPasswordCheck"
+                                                   v-on:keyup.enter="registerData()"
+                                                   laceholder="再次輸入">
                                         </div>
                                     </div>
-                                    <a href="login.html" class="btn btn-primary btn-user btn-block">
+                                    <a class="btn btn-primary btn-user btn-block" v-on:click="registerData()">
                                         註冊帳號
                                     </a>                                    
                                 </form>
@@ -79,11 +99,29 @@
         const register = Vue.createApp({
             data() {
                 return {
+                    sexOptions: [
+                    {
+                        id: 99,
+                        name: '請選擇'
+                    },
+                    {
+                        id: 1,
+                        name: '男'
+                    }, {
+                        id: 2,
+                        name: '女'
+                    }, {
+                        id: 0,
+                        name: '不透漏'
+                    }],
+
                     message: 'Hello Vue 3.0',
                     Account: '',
+                    Name: '',
+                    sexId: 99,
                     Email: '',
                     Password: '',
-                    Password: '',
+                    Password2: '',
                 }
             },
             mounted() {
@@ -95,24 +133,53 @@
                     mounted(el, binding) {
                         el.addEventListener('input', debounce(() => {
                             binding.value();
-                        }, parseInt(binding.arg) || 300));
+                        }, parseInt(binding.arg) || 500));
                     }
                 })
             },
             methods: {
-                
-                
-            
+                /** 帳號檢查 */
+                accountCheck() {
+                    $('#exampleAccount').css('border-color', 'red');
+
+                    var validRegex = /[\u4E00-\u9FA5]/g;
+
+
+                    if (register.Account === '') {
+                        $('#exampleAccount').css('border-color', 'red');
+                        alert('帳號 不可為空白');
+                        return false;
+                    } else if (register.Account.match(validRegex)) {
+                        alert('帳號只允許數字加英文的組合');
+                        return false;
+                    } else {
+                        $('#exampleAccount').removeAttr('style');
+                        return true;
+                    }
+                },
+                /** 名字檢查 */
+                nameCheck() {
+                    $('#exampleInputName').css('border-color', 'red');
+
+                    if (register.Name === '') {
+                        $('#exampleInputName').css('border-color', 'red');
+                        alert('名字 不可為空白');
+                        return false;
+                    } else {
+                        $('#exampleInputName').removeAttr('style');
+                        return true;
+                    }
+                },
                 /** Email檢查 */
                 emailCheck() {
                     $('input[type="email"]').css('border-color', 'red');
 
-                    if (app1.Email === '') {
+                    if (register.Email === '') {
                         alert('Email 不可為空白');
                         return false;
                     } else {
                         var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-                        if (!app1.Email.match(validRegex)) {
+                        if (!register.Email.match(validRegex)) {
                             alert('Email 格式錯誤');
                             return false;
                         }
@@ -123,15 +190,125 @@
                         return true;
                     }
                 },
+                /** 性別下拉式選單檢查 */
+                sexCheck() {
+                    $('#sexSelect').css('border-color', 'red');
+
+                    if (register.sexId == 99) {
+                        alert('請選擇性別');
+                        return false;
+                    }
+
+                    if (true) {
+                        $('#sexSelect').removeAttr('style');
+                        return true;
+                    }
+                },
                 /** 密碼檢查 */
                 PasswordCheck() {
-                    if (app1.Password === '') {
-                        $('input[type="password"]').css('border-color', 'red');
-                        alert('Password 不可為空白');
+                    if (register.Password === '') {
+                        $('#exampleInputPassword').css('border-color', 'red');
+                        alert('密碼欄位 不可為空白');
                         return false;
                     } else {
-                        $('input[type="password"]').removeAttr('style');
+                        $('#exampleInputPassword').removeAttr('style');
                         return true;
+                    }
+                },
+                /** 密碼檢查-再次輸入，兩個密碼欄位必須一致 */
+                RepeatPasswordCheck() {
+                    if (register.Password2 === '') {
+                        $('#exampleInputPassword2').css('border-color', 'red');
+                        alert('請再次輸入密碼');
+                        return false;
+                    } else if (register.Password2 !== '') {
+                        if (register.Password2 !== register.Password) {
+                            $('#exampleInputPassword2').css('border-color', 'red');
+                            alert('密碼不一致，請再次確認');
+                            return false;
+                        } else {
+                            $('#exampleInputPassword2').removeAttr('style');
+                            return true;
+                        }
+                    } else {
+                        $('#exampleInputPassword2').removeAttr('style');
+                        return true;
+                    }
+                },
+                /** 驗證表單 */
+                validateForm() {
+                    if (!this.accountCheck()) {
+                        return false;
+                    }
+
+                    if (!this.nameCheck()) {
+                        return false;
+                    }
+
+                    if (!this.sexCheck()) {
+                        return false;
+                    }
+
+                    if (!this.emailCheck()) {
+                        return false;
+                    }
+
+                    if (!this.PasswordCheck()) {
+                        return false;
+                    }
+
+                    if (!this.RepeatPasswordCheck()) {
+                        return false;
+                    }
+
+                    if (true) {
+                        return true;
+                    }
+                },
+                /** 註冊 */
+                registerData() {
+                    if (this.validateForm()){
+                        var form = {};                        
+                        form.Account = register.Account;
+                        form.Name = register.Name;
+                        form.Sex = register.sexId;
+                        form.Email = register.Email;
+                        form.Password = register.Password;
+                        form.RepeatPassword = register.Password2;
+
+                        axios
+                            .post('/Member/DoRegister',
+                                {
+                                    model: form,
+                                },
+                                {
+                                    headers: {
+                                        //multipart/form-data // => 搭配檔案上傳
+                                        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' // => 無檔案用這個就好
+                                    }
+                                }
+                            )
+                            .then(response => {
+                                $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
+
+                                setTimeout(() => {
+                                    $.unblockUI();
+
+                                    if (response.data.vaild === true) {
+                                        // 導入 個人資料頁
+                                        window.location = response.data.url;                                        
+                                    } else {
+                                        alert(response.data.msg);
+                                    }
+                                }, 1000);
+                            })
+                            .catch(function (error) { // 请求失败处理
+                                $.unblockUI();
+                                alert(error);
+                                console.log(error);
+                            })
+                    } else {
+                        alert('表單驗證不通過 !!');
                     }
                 },
             },

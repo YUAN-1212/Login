@@ -126,6 +126,34 @@ namespace Login.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 註冊
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult DoRegister(RegisterDto model)
+        {
+            var isok = _service.registerData(model);
+            var url = "";
+
+            if (isok.valid) 
+            {
+                url = "/Member/Blank";
+
+                // 將登入帳號記錄在 Cookies 內
+                CookieOptions options = new CookieOptions();
+                options.Expires = DateTime.Now.AddDays(7);
+                Response.Cookies.Append(Email, model.Email);
+                Response.Cookies.Append("UserLogin", "Y");
+
+                return Json(new { vaild = isok.valid, msg = isok.message, url = url });
+            }
+            else
+            {
+                return Json(new { vaild = false, msg = isok.message });
+            }
+            //return Json(new { vaild = isok.valid, url = url, msg = isok.message });            
+        }
+
         #endregion
 
         #region ::: 個人資料頁 :::

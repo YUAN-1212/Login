@@ -2,6 +2,7 @@
 using Application.Member.Dto;
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
 
 namespace Application.Member
 {
@@ -140,6 +141,13 @@ namespace Application.Member
                 }
                 else
                 {
+                    if (!Common.checkEmail(model.Email))
+                    {
+                        // 信箱格式驗證
+                        message.message = "信箱格式錯誤!";
+                        return message;
+                    }
+
                     if (action == 1)
                     {
                         #region 新增
@@ -254,6 +262,101 @@ namespace Application.Member
             }
         }
 
-       
+        /// <summary>
+        /// 註冊帳號
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public MessageResult registerData(RegisterDto model)
+        {
+            var message = new MessageResult();
+            var addDate = DateTime.Now;
+
+            message.valid = false;
+
+            try
+            {
+                #region 簡易驗證
+                if (string.IsNullOrWhiteSpace(model.Name))
+                {
+                    message.message = "姓名必填!";
+                    return message;
+                }
+
+                if (string.IsNullOrWhiteSpace(model.Account))
+                {
+                    message.message = "帳號必填!";
+                    return message;
+                }
+
+                if (string.IsNullOrWhiteSpace(model.Email))
+                {
+                    message.message = "信箱必填!";
+                    return message;
+                }
+
+                if (model.Sex == 99)
+                {
+                    message.message = "性別必填!";
+                    return message;
+                }
+
+                if (model.Password != model.RepeatPassword)
+                {
+                    message.message = "密碼欄位不一致，請重新輸入!";
+                    return message;
+                }
+
+                if (!Common.checkEmail(model.Email))
+                {
+                    // 信箱格式驗證
+                    message.message = "信箱格式錯誤!";
+                    return message;
+                }
+                #endregion
+
+                var account = db.MemberDatas.Where(p => p.Account == model.Account).FirstOrDefault();
+                if (account != null)
+                {
+                    message.message = "帳號已被使用!";
+                    return message;
+                }
+
+                var email = db.MemberDatas.Where(p => p.Email == model.Email).FirstOrDefault();
+                if (email != null)
+                {
+                    message.message = "已有相同的信箱!";
+                    return message;
+                }
+
+                var password = Common.ToMD5(model.Password);
+
+                // 新增 MemberData 主資料表
+                var member = new MemberData()
+                {
+                    Name = model.Name,
+                    Account = model.Account,
+                    PassWord = password,
+                    Sex = model.Sex,
+                    Email = model.Email,
+                    CreateDate = addDate,
+                    UpdateDate = addDate,
+                };
+
+                db.MemberDatas.Add(member);
+                db.SaveChanges();
+
+                message.valid = true;
+                message.message = "註冊成功!";
+
+                return message;
+            }
+            catch (Exception ex)
+            {
+                message.valid = false;
+                message.message = "發生錯誤，ex=" + ex.ToString();
+                return message;
+            }
+        }
     }
 }

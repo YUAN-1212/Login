@@ -64,4 +64,27 @@ namespace Application.Member.Dto
         /// </summary>
         public int Status { get; set; }
     }
+
+    public class RegisterDto : LoginDto
+    {
+        /// <summary>
+        /// 帳號
+        /// </summary>
+        public string Account { get; set; }
+
+        /// <summary>
+        /// 名字
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 性別代碼
+        /// </summary>
+        public int Sex { set; get; }
+
+        /// <summary>
+        /// 再次輸入密碼欄位
+        /// </summary>
+        public string RepeatPassword { get; set; }
+    }
 }
