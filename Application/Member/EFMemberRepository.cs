@@ -2,6 +2,7 @@
 using Application.Member.Dto;
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Principal;
 
 namespace Application.Member
@@ -87,7 +88,25 @@ namespace Application.Member
                     else
                     {
                         #region 新帳號
-                        
+                        member.MemberID = m.ID;
+                        member.Account = m.Account;
+                        member.Name = m.Name;
+                        member.Email = m.Email;
+                        member.SexId = m.Sex;
+
+                        string sex = m.Sex.ToString();
+                        member.Sex = db.CodeTables.Where(p => p.CodeName == "Sex" && p.CodeValue == sex).Select(p => p.Memo).FirstOrDefault();
+                        member.Photo = "profile_empty";
+                        member.base64String = Convert.ToBase64String(File.ReadAllBytes(@$"{root}\img\{member.Photo}.jpg"));
+
+                        member.RoleId = 2; // 預設為一般使用者
+                        string role = member.RoleId.ToString();
+                        member.Role = db.CodeTables.Where(p => p.CodeName == "RoleID" && p.CodeValue == role).Select(p => p.Memo).FirstOrDefault();
+
+                        member.Status = 1; // 預設為啟用
+
+                        member.valid = true;
+                        member.message = "";
                         #endregion
                     }
                 }
