@@ -41,6 +41,16 @@ namespace Domain.Model
         /// 會員詳細資料
         /// </summary>
         public DbSet<AccountData> AccountDatas { get; set; }
+
+        /// <summary>
+        /// 選單資料
+        /// </summary>
+        public DbSet<ConfigMenus> ConfigMenuss { get; set; }
+
+        /// <summary>
+        /// 會員ID對應至哪個選單
+        /// </summary>
+        public DbSet<RoleMenuMapping> RoleMenuMappings { get; set; }
         #endregion
     }
 }

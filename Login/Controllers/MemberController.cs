@@ -264,6 +264,13 @@ namespace Login.Controllers
             return View();
         }
 
+        public IActionResult Blank3()
+        {
+
+
+            return View();
+        }
+
         /// <summary>
         /// 登出
         /// </summary>
@@ -292,5 +299,6 @@ namespace Login.Controllers
             //await signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
+
     }
 }

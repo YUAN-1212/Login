@@ -1,50 +1,46 @@
 ﻿<div id="page-top" style="width: 100%;">
     <!-- Page Wrapper -->
-    <!--<div id="wrapper">-->
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <li class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
             <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
-        </a>
-
-        <!-- START 測試 Vue -->
-        <div v-for="(item, index) in menuRoutes">
-        <li class="nav-item" v-if="item.children.length == 0">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>{{item.name}}</span>
-                <span>{{item.children.length}}</span>
-            </a>
         </li>
 
-        <li v-if="item.children.length > 0" class="nav-item">
-            <a class="nav-link" href="#" data-toggle="collapse" :data-target="'#'+item.dataTargetName" aria-expanded="true">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>{{item.name}}</span>
-                <span>{{item.children.length}}</span>
-            </a>
-            <div :id="item.dataTargetName" class="collapse" aria-labelledby="headingTwo"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a v-for="(item, index) in item.children" class="collapse-item">{{item.childrenName}}</a>
+        <!-- START 測試 Vue -->
+        <li v-for="(item, index) in menuRoutes">
+            <div class="nav-item" v-if="item.children.length == 0">
+                <a class="nav-link" v-on:click="getSideBar(item.code)">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>{{item.name}}</span>
+                </a>
+            </div>
+
+            <div v-if="item.children.length > 0" class="nav-item">
+                <a class="nav-link" href="#" data-toggle="collapse" :data-target="'#'+item.dataTargetName" aria-expanded="true">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>{{item.name}}</span>
+                </a>
+                <div :id="item.dataTargetName" class="collapse" aria-labelledby="headingTwo"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a v-for="(item, index) in item.children" class="collapse-item" v-on:click="getSideBar(item.code)">{{item.childrenName}}</a>
+                        @* :href="item.path" *@
+                    </div>
                 </div>
             </div>
         </li>
-</div>
-
-
 <!-- END 測試 Vue -->
 <!-- Sidebar Toggler (Sidebar) -->
 <div class="text-center d-none d-md-inline">
     <button class="rounded-circle border-0" id="sidebarToggle"></button>
 </div>
 
-        </ul>
+    </ul>
 <!-- End of Sidebar -->
 <!-- Topbar -->
 <div id="navHeader" style="position:absolute; left:0; right:0; padding-left:224px; top: 0;">
@@ -192,13 +188,8 @@
         </ul>
 
     </nav>
-    <!-- Begin Page Content 內容-->
-    <!-- <div class="container-fluid" id="test">
-        </div>-->
-    <!-- /.container-fluid 內容-->
 </div>
 <!-- End of Topbar -->
-<!-- </div>-->
 <!-- End of Page Wrapper -->
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
@@ -233,81 +224,156 @@
                 message: 'Hello Vue 3.0',
                 // message2: '第二個訊息',
 
+                code: '',
                 menuRoutes: [{
                     path: '/blank',
                     name: '個人資料',
+                    code: 'A001',
                     dataTargetName: '',
                     children: [/** 子選單 */]
                 }, {
                     path: '',
                     name: '用戶管理',
+                    code: 'B001',
                     dataTargetName: 'collapseAdmin',
                     children: [{
-                        path: '/',
+                        path: '/Member/Blank2',
+                        code: 'B002',
                         childrenName: '1.用戶列表',
                         isactive: true,
                     }, {
-                        path: '/',
+                        path: '/Member/Blank3',
+                        code: 'B003',
                         childrenName: '2.添加用戶',
                         isactive: false,
                     }, {
                         path: '/',
-                        name: '3....',
+                        childrenName: '3....',
+                        code: 'B004',
                         isactive: false,
                     }, {
                         path: '/',
-                        name: '4....',
+                        childrenName: '4....',
+                        code: 'B005',
                         isactive: false,
                     }]
                 }, {
                     path: '',
                     name: '課堂管理',
+                    code: 'C001',
                     dataTargetName: 'collapseClass',
                     children: [{
                         path: '/',
+                        code: 'C002',
                         childrenName: '1.學生列表',
                         isactive: true,
                     }, {
                         path: '/',
+                        code: 'C003',
                         childrenName: '2.課程列表',
                         isactive: false,
                     }, {
                         path: '/',
+                        code: 'C004',
                         childrenName: '3....',
                         isactive: false,
                     }]
                 }, {
                     path: '',
                     name: '報表',
+                    code: 'D001',
                     dataTargetName: 'collapseReport',
                     children: [{
                         path: '/',
+                        code: 'D002',
                         childrenName: '1.學生報表',
                         isactive: true,
                     }, {
                         path: '/',
+                        code: 'D003',
                         childrenName: '2.課程報表',
                         isactive: false,
                     }, {
                         path: '/',
+                        code: 'D004',
                         childrenName: '3.時間報表',
                         isactive: false,
                     }, {
                         path: '/',
+                        code: 'D005',
                         childrenName: '4.系統報表',
                         isactive: false,
                     }]
+                }, {
+                    path: '/',
+                    name: '公告',
+                    code: 'E001',
+                    dataTargetName: '',
+                    children: [/** 子選單 */]
                 }]
             }
         },
         mounted() {
             console.log('mounted subMenu');
+
+            this.getSideBar();
         },
         methods: {
-            /** 登出 */
-            logout() {
-                $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
-                window.location = '@Url.Action("Logout")';
+            /** 取得側邊欄 */
+            getSideBar(c) {
+                debugger;
+                //document.cookie = "code=" + c;
+                //subMenu.code = c;
+
+                if (c === undefined) {
+                    document.cookie = "code=0";
+                } else {
+                    document.cookie = "code=" + c;
+                }
+
+                if (performance.navigation.type === 1) {
+                    console.log("页面是通过用户的刷新操作加载的");
+                } else {
+                    console.log("页面不是通过刷新操作加载的");
+                }
+
+                axios
+                    .post('/Head/GetSideBar',
+                        null,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json; charset=utf-8',
+                            }
+                        }
+                    )
+                    .then(response => {
+                        $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
+
+                        setTimeout(() => {
+                            $.unblockUI();
+
+                            if (response.data.vaild === true) {
+                                alert(response.data.msg);
+                            } else {
+                                alert(response.data.msg);
+                            }
+                        }, 1000);
+                    })
+                    .catch(function (error) { // 请求失败处理
+                        $.unblockUI();
+                        alert(error);
+                        console.log(error);
+                    })
+            },
+            /** 測試 */
+            test(c){
+                debugger;
+                console.log('選到的選單code=' + c);
+                var x = document.cookie;
+                console.log('cookie沒改之前=' + x);
+                document.cookie = "code=" + c;
+                console.log('cookie 改之後=' + x);
+                subMenu.code = c;
             },
         },
     }).mount('#page-top')

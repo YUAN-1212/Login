@@ -35,14 +35,37 @@ CREATE TABLE IF NOT EXISTS "AccountData" (
 	"UpdateUser"	TEXT NOT NULL,
 	PRIMARY KEY("ID")
 );
+CREATE TABLE IF NOT EXISTS "ConfigMenus" (
+	"ID"	INTEGER NOT NULL,
+	"Name"	TEXT NOT NULL,
+	"Order"	INTEGER,
+	"ParentID"	NUMERIC NOT NULL,
+	"URL"	TEXT,
+	"Status"	INTEGER NOT NULL,
+	"Description"	TEXT,
+	"Code"	TEXT,
+	"CreateTime"	TEXT NOT NULL,
+	"CreateUser"	TEXT NOT NULL,
+	"UpdateTime"	TEXT NOT NULL,
+	"UpdateUser"	TEXT NOT NULL,
+	PRIMARY KEY("ID")
+);
 INSERT INTO "CodeTable" VALUES (1,'Sex','性別','1','男',1,'2024-01-15','2024-01-15');
 INSERT INTO "CodeTable" VALUES (2,'Sex','性別','2','女',1,'2024-01-15','2024-01-15');
 INSERT INTO "CodeTable" VALUES (3,'Sex','性別','0','不透露',1,'2024-01-15','2024-01-15');
 INSERT INTO "CodeTable" VALUES (4,'RoleID','腳色權限','1','系統管理員',1,'2024-01-24','2024-01-24');
 INSERT INTO "CodeTable" VALUES (5,'RoleID','腳色權限','2','一般使用者',1,'2024-01-24','2024-01-24');
-INSERT INTO "MemberData" VALUES (1,'莉莉','Lily','202CB962AC59075B964B07152D234B70',0,'lily@gmail.com','2024-01-15 00:00:00','2024-02-02 14:54:22.4799668');
+INSERT INTO "MemberData" VALUES (1,'莉莉','Lily','202CB962AC59075B964B07152D234B70',0,'lily@gmail.com','2024-01-15 00:00:00','2024-02-02 15:08:29.4973379');
 INSERT INTO "MemberData" VALUES (2,'大明','Bob','202CB962AC59075B964B07152D234B70',1,'Bob@gmail.com','2024-01-15','2024-01-15');
 INSERT INTO "MemberData" VALUES (3,'小汪汪','Tim','202CB962AC59075B964B07152D234B70',1,'Tim@gmail.com','2024-01-15','2024-01-15');
 INSERT INTO "MemberData" VALUES (4,'魚兒水中飄','Fish','202CB962AC59075B964B07152D234B70',0,'Fish@gmail.com','2024-01-15','2024-01-15');
-INSERT INTO "AccountData" VALUES (1,1,'1989-01-19 00:00:00',NULL,NULL,1,1,'2024-01-24 00:00:00','Lily','2024-02-02 14:54:22.4799668','Lily');
+INSERT INTO "MemberData" VALUES (5,'艾咪','amy','202CB962AC59075B964B07152D234B70',0,'amy123@gmail.com','2024-02-05 14:45:41.6435123','2024-02-05 14:45:41.6435123');
+INSERT INTO "MemberData" VALUES (6,'艾倫','Allan','202CB962AC59075B964B07152D234B70',1,'Allan99@gmail.com','2024-02-05 15:32:20.4120963','2024-02-05 15:32:20.4120963');
+INSERT INTO "AccountData" VALUES (1,1,'1989-01-19 00:00:00',NULL,'可愛狗狗',1,1,'2024-01-24 00:00:00','Lily','2024-02-02 15:08:29.4973379','Lily');
+INSERT INTO "ConfigMenus" VALUES (1,'個人資料',1,0,'/Member/Blank',1,NULL,NULL,'2024-02-06','lily','2024-02-06','lily');
+INSERT INTO "ConfigMenus" VALUES (2,'用戶管理',2,0,NULL,1,NULL,NULL,'2024-02-06','lily','2024-02-06','lily');
+INSERT INTO "ConfigMenus" VALUES (3,'1.用戶列表',1,2,'/Member/Blank2',1,NULL,NULL,'2024-02-06','lily','2024-02-06','lily');
+INSERT INTO "ConfigMenus" VALUES (4,'2.添加用戶',2,2,'/Member/Blank3',1,NULL,NULL,'2024-02-06','lily','2024-02-06','lily');
+INSERT INTO "ConfigMenus" VALUES (5,'課堂管理',3,0,NULL,1,NULL,NULL,'2024-02-06','lily','2024-02-06','lily');
+INSERT INTO "ConfigMenus" VALUES (6,'公告',4,0,NULL,1,NULL,NULL,'2024-02-06','lily','2024-02-06','lily');
 COMMIT;

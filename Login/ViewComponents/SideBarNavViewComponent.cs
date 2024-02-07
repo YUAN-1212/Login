@@ -10,7 +10,7 @@ namespace Login.ViewComponents
         //要接的參數隨意
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View();
+            return View(new { vaild = false, msg = "無法辨識的操作" });
         }
     }
 }
