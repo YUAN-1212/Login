@@ -15,6 +15,7 @@ namespace Login.Filter
             // 在這裡進行自訂的登入檢查邏輯
             string? Email = context.HttpContext.Request.Cookies["Email"];
             string? UserLogin = context.HttpContext.Request.Cookies["UserLogin"];
+            string? Code = context.HttpContext.Request.Cookies["code"]; // 側邊欄是哪一個
 
             // 檢查 action 是否有標註屬性 [ByCheck]，若有，則代表要檢查
             var byCheckAttribute = context.ActionDescriptor.EndpointMetadata.OfType<ByCheck>();

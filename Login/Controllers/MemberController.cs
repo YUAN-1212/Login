@@ -287,7 +287,7 @@ namespace Login.Controllers
         /// 登出
         /// </summary>
         /// <returns></returns>
-        //[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             // 登出要清除
@@ -295,6 +295,7 @@ namespace Login.Controllers
 
             Response.Cookies.Delete(Email);
             Response.Cookies.Delete("UserLogin");
+            Response.Cookies.Delete("code");
 
             //await signInManager.SignOutAsync();
             return RedirectToAction("Login");

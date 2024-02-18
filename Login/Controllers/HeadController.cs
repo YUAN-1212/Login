@@ -22,7 +22,8 @@ namespace Login.Controllers
             string code = Request.Cookies["code"].ToString();
 
 
-            return Json(new { vaild = false, msg = "無法辨識的操作" });
+            //return Json(new { vaild = false, msg = "無法辨識的操作" });
+            return Json(new { vaild = false, msg = "" });
         }
 
         #endregion

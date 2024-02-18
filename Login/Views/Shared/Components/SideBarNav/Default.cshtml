@@ -28,7 +28,7 @@
                 <div :id="item.dataTargetName" class="collapse" aria-labelledby="headingTwo"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a v-for="(item, index) in item.children" class="collapse-item" v-on:click="getSideBar(item.code)">{{item.childrenName}}</a>
+                        <a v-for="(item, index) in item.children" class="collapse-item" v-on:click="test(item.code)">{{item.childrenName}}</a>
                         @* :href="item.path" *@
                     </div>
                 </div>
@@ -321,21 +321,6 @@
         methods: {
             /** 取得側邊欄 */
             getSideBar(c) {
-                debugger;
-                //document.cookie = "code=" + c;
-                //subMenu.code = c;
-
-                if (c === undefined) {
-                    document.cookie = "code=0";
-                } else {
-                    document.cookie = "code=" + c;
-                }
-
-                if (performance.navigation.type === 1) {
-                    console.log("页面是通过用户的刷新操作加载的");
-                } else {
-                    console.log("页面不是通过刷新操作加载的");
-                }
 
                 axios
                     .post('/Head/GetSideBar',
@@ -352,11 +337,11 @@
                         setTimeout(() => {
                             $.unblockUI();
 
-                            if (response.data.vaild === true) {
-                                alert(response.data.msg);
-                            } else {
-                                alert(response.data.msg);
-                            }
+                            // if (response.data.vaild === true) {
+                            //     alert(response.data.msg);
+                            // } else {
+                            //     alert(response.data.msg);
+                            // }
                         }, 1000);
                     })
                     .catch(function (error) { // 请求失败处理
@@ -372,8 +357,30 @@
                 var x = document.cookie;
                 console.log('cookie沒改之前=' + x);
                 document.cookie = "code=" + c;
-                console.log('cookie 改之後=' + x);
+                console.log('cookie 改之後=' + document.cookie);
                 subMenu.code = c;
+            },
+            /** 登出 */
+            logout() {
+                axios
+                    .post('/Member/Logout',
+                        null,
+                        {
+                            headers: {
+                                'Content-Type': 'application/json; charset=utf-8',
+                            }
+                        }
+                    )
+                    .then(response => {
+                        $.blockUI({ message: '<h1>處理中請稍候…</h1>' });
+
+                        location.reload();
+                    })
+                    .catch(function (error) { // 请求失败处理
+                        $.unblockUI();
+                        alert(error);
+                        console.log(error);
+                    })
             },
         },
     }).mount('#page-top')
