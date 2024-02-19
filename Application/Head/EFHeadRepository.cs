@@ -27,9 +27,10 @@ namespace Application.Head
 
             try
             {
+                // 先找出父選單 (ParentID == 0)
                 var ParentDto = (from a in db.RoleMenuMappings
                                  join b in db.ConfigMenuss on a.MenuID equals b.ID
-                                 where a.MenuID == AccountID
+                                 where a.MenuID == AccountID && b.ParentID == 0
                                  orderby b.Order
                                  select new
                                  {
